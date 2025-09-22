@@ -2,21 +2,34 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import ImageTk, Image
 import random
+#medidas de las fotos
 ANCHO_FOTO=150
 ALTO_FOTO=150
+#medidas para las fotos pequenas
 ANCHO_FOTO_MINIATURA=70
 ALTO_FOTO_MINIATURA=70
+
 POSICION_INICIAL=0
+
 NUM_IMAGENES=0
+#variable para saber cuando poder invocar 
 regreso=False
+#lista para las permutas
 lista_posiciones = [] 
+#guardar las etiquetas
 lista_imagenes_etiquetas=[]
+#para la ubicacion de las imagenes
 lista_imagenes_rutas=[]
+#image
 lista_imagenes=[]
+#image tk
 lista_imagenes_tk=[]
+# los frames de opciones
 lista_frames_opciones=[]
+
 lista_imagenes_etiquetas_principales=[]
 permutas = []
+
 def factorial(n):
     if n < 0:
         return 0
@@ -26,7 +39,6 @@ def factorial(n):
     for i in range(1, n + 1):
         resultado *= i
     return resultado
-
 
 def generador_permutas_fuerza_bruta(lista):
     global permutas
@@ -77,7 +89,7 @@ def crear_miniaturas():
         for j in range(NUM_IMAGENES):
             etiqueta=tk.Label(lista_frames_opciones[i], image=lista_imagenes_tk[j], width=ANCHO_FOTO_MINIATURA, height=ALTO_FOTO_MINIATURA)
             lista_imagenes_etiquetas.append(etiqueta)
-    
+
 def generar_posicion_opciones(posicion_inicial):
     global POSICION_INICIAL
     global permutas
@@ -124,18 +136,18 @@ def generar_posicion_opciones(posicion_inicial):
             lista_imagenes_etiquetas[i].grid(column=permutas[posicion_inicial-1][j][0],row=permutas[posicion_inicial-1][j][1])  
             j=j+1     
 
-
-    
 def siguiente():
     global POSICION_INICIAL
     if POSICION_INICIAL+1!=len(permutas):
         POSICION_INICIAL=POSICION_INICIAL+1
     generar_posicion_opciones(POSICION_INICIAL-1)
+    
 def anterior():
     global POSICION_INICIAL
     if POSICION_INICIAL-1>=0:
         POSICION_INICIAL=POSICION_INICIAL-1
     generar_posicion_opciones(POSICION_INICIAL-1)
+    
 def realizar_permutas():
     global permutas
     global lista_posiciones
@@ -153,44 +165,37 @@ def realizar_permutas():
     lista_frames_opciones[2].grid(column=3, row=0)
     generar_posicion_opciones(POSICION_INICIAL)  
 
-
-
-
-    
-
-
-
+#Programa principal
 root=tk.Tk()
 root.geometry("800x700")
 root.title("Permutaciones")
 root.config(background='#1b1b32')
+#Creacion de Frames
 frame_fotos=tk.Frame(highlightbackground="#E0E0E4",highlightthickness=4,width=210,height=200,background="#1d1d36")
-frame_fotos.pack(pady=15)
 frame_no_imagenes=tk.Frame(frame_fotos,width=500,height=400,highlightbackground="#E5E5E8",highlightthickness=4,background="#1d1d36")
-frame_no_imagenes.pack(pady=15)
 etiqueta_agregar_imagenes=tk.Label(frame_no_imagenes,text="AGREGA IMAGENES!!!!!!!!",width=60,height=15,background="#252546",font='sans_serif',fg="#E8E8F9")
-etiqueta_agregar_imagenes.pack()
 frame_opciones_fotos=tk.Frame(pady=10, padx=10,background="#1d1d36",highlightbackground="#353544",highlightthickness=4)
-frame_opciones_fotos.pack()
-frame_botones=tk.Frame(pady=10,background='#1b1b32')
-frame_botones.pack(pady=5)
 lista_frames_opciones.append(tk.Frame(frame_opciones_fotos, width=210,height=210,padx=10,background="#1d1d36"))
 lista_frames_opciones.append(tk.Frame(frame_opciones_fotos,width=210,height=210,padx=30, highlightbackground="#e9e9f2", highlightthickness=3,background="#1d1d36"))
 lista_frames_opciones.append(tk.Frame(frame_opciones_fotos,width=210,height=210,padx=20,background="#1d1d36"))
 frame_no_disponible=tk.Frame(frame_opciones_fotos,width=210,height=210,padx=10,bg="#1d1d36")
+frame_botones=tk.Frame(pady=10,background='#1b1b32')
+#Creacion de etiquetas
 etiqueta_no_disponible=tk.Label(frame_no_disponible, text="NO DISPONIBLE", height=5, width=12,padx=10,bg="#1d1d36",fg="white",font='sans_serif')
-#etiquetas grandes
 label_anterior=tk.Label(frame_botones,text="Opcion Anterior",fg="white",bg='#1b1b32',font='sans_serif')
 label_siguiente=tk.Label(frame_botones,text="Opcion siguiente",fg="white",bg='#1b1b32',font='sans_serif')
+#Botones
 boton_anterior=tk.Button(frame_botones,text="<<", command=anterior,fg="white",background="#42426c",width=10,height=5)
 boton_siguiente=tk.Button(frame_botones,text=">>", command=siguiente,fg="white",background="#42426c",width=10,height=5)
 boton_permutas=tk.Button(frame_botones,text="Realizar Permutas", command=realizar_permutas,fg="white",background="#3e3e70",width=15,height=2,font='sans_serif',state="disabled")
-boton_permutas.grid(column=2, row=0)
 boton_imagen=tk.Button(frame_botones,text="Sube una imagen",command=selecionar_imagen,fg="white",background="#3e3e70",font='sans_serif',width=15)
+#enpaquetar y presentar botones y etiquetas
+frame_fotos.pack(pady=15)
+frame_no_imagenes.pack(pady=15)
+etiqueta_agregar_imagenes.pack()
+frame_opciones_fotos.pack()
+frame_botones.pack(pady=5)
+boton_permutas.grid(column=2, row=0)
 boton_imagen.grid(column=2,row=1)
 
-
-
-
 root.mainloop()
-
