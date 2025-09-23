@@ -30,28 +30,28 @@ lista_frames_opciones=[]
 lista_imagenes_etiquetas_principales=[]
 permutas = []
 
-def factorial(n):
-    if n < 0:
-        return 0
-    if n == 0:
-        return 1
-    resultado = 1
-    for i in range(1, n + 1):
-        resultado *= i
-    return resultado
-
-def generador_permutas_fuerza_bruta(lista):
+def permutas_fuerza_bruta(lista):
     global permutas
-    n = len(lista)
-    permutas.append(list(lista))
-    while len(permutas) < factorial(n):
-        nueva_lista = list(lista)
-        random.shuffle(nueva_lista)
-        
-        if nueva_lista not in permutas:
-            permutas.append(nueva_lista)
-            
-    
+    # Caso base: si la lista tiene un solo elemento, es una permutación.
+    if len(lista) <= 1:
+        return [lista]
+    permutas_totales=[]
+    # Recorrer cada elemento de la lista
+    for i in range(len(lista)):
+        # Tomar el elemento actual como pivote
+        elemento_actual = lista[i]
+        # Crear una sub-lista con los elementos restantes
+        resto_de_la_lista = lista[:i] + lista[i+1:]
+
+        # Llamada recursiva para obtener las permutaciones de la sub-lista
+        permutaciones_del_resto = permutas_fuerza_bruta(resto_de_la_lista)
+        # Iterar sobre las permutaciones de la sub-lista
+        for p in permutaciones_del_resto:
+            # Añadir el elemento "pivot" al inicio de cada permutación del resto
+            nueva_permutacion = [elemento_actual] + p
+            permutas_totales.append(nueva_permutacion)
+    return permutas_totales
+
 def selecionar_imagen():
     
     global lista_imagenes_etiquetas_principales
@@ -157,7 +157,7 @@ def realizar_permutas():
     boton_anterior.grid(column=1, row=0)
     boton_siguiente.grid(column=3, row=0)
     crear_miniaturas()
-    generador_permutas_fuerza_bruta(lista_posiciones)
+    permutas=permutas_fuerza_bruta(lista_posiciones)
     label_anterior.grid(column=0,row=0)
     label_siguiente.grid(column=4,row=0)
     lista_frames_opciones[0].grid(column=1, row=0)
